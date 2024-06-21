@@ -1,12 +1,12 @@
 ### QST - Sentiment Analysis on Vietnames Financial Articals
 
 ### Technologies and Libraries
-* scrapy: crawling data from websites
-* numpy, pandas: pre-processing
-* transformers, torch: training models
-* 
+* __scrapy__: crawling data from websites
+* __numpy__, __pandas__: pre-processing
+* __transformers__, __torch__: training models
+
 ### File System
-'''bash
+```bash
 |-- app
 |-- crawler
 |-- data
@@ -17,7 +17,7 @@
     |-- google-colab
     |-- data-analysis
     |-- demo-ai.ipynb
-'''
+```
 ### Dataset
 
 
