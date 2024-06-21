@@ -103,7 +103,7 @@
           </div>
         </div>
         {% endif %}
-        {% if probs %}
+        {% if url == False %}
         <div class="flex-row">
           <div class="flex-item flex-column">
             <h2>Classification Result</h2>
@@ -125,33 +125,33 @@
             </div>
 
           </div>
-          {% endif %}
-          {% if probs_url %}
-          <div class="flex-row">
-            <div class="flex-item flex-column">
-              <h2>Classification Result</h2>
-              <hr>
-              <div class="flex-row">
-                <div class="flex-item flex-column">
-                  <ul>
-                    {% for prob in probs %}
-                    <li>{{ label_map[loop.index-1] }}: {{ '%.2f' % (prob * 100) }}%</li>
-                    {% endfor %}
-                  </ul>
-                </div>
-                <div class="flex-item flex-column">
+        </div>
+        {% else %}
+        <div class="flex-row">
+          <div class="flex-item flex-column">
+            <h2>Classification Result</h2>
+            <hr>
+            <div class="flex-row">
+              <div class="flex-item flex-column">
+                <ul>
+                  {% for prob in probs %}
+                  <li>{{ label_map[loop.index-1] }}: {{ '%.2f' % (prob * 100) }}%</li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <div class="flex-item flex-column">
 
-                  <div style="width: 100%;">
-                    <canvas id="pie-chart"></canvas>
-                  </div>
+                <div style="width: 100%;">
+                  <canvas id="pie-chart"></canvas>
                 </div>
               </div>
             </div>
-            {% endif %}
           </div>
         </div>
-        <div class="footer-container"></div>
+        {% endif %}
       </div>
+      <div class="footer-container"></div>
+    </div>
 </body>
 
 </html>
@@ -159,43 +159,43 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-      // Get data from Django context
-      var labels = Object.values(JSON.parse('{{ dump_label_map|safe }}'));
-      var values = JSON.parse('{{ probs|safe }}');
+    // Get data from Django context
+    var labels = Object.values(JSON.parse('{{ dump_label_map|safe }}'));
+    var values = JSON.parse('{{ probs|safe }}');
 
-      // Pie chart
-      var ctx = document.getElementById('pie-chart').getContext('2d');
-      var myPieChart = new Chart(ctx, {
-          type: 'pie',
-          data: {
-              labels: labels,
-              datasets: [{
-                  label: 'Pie Chart',
-                  data: values,
-                  backgroundColor: [
-                      'rgba(54, 162, 235, 0.7)',
-                      'rgba(255, 99, 132, 0.7)',
-                      'rgba(255, 206, 86, 0.7)'
-                  ],
-                  borderColor: [
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 99, 132, 1)',
-                      'rgba(255, 206, 86, 1)'
-                  ],
-                  borderWidth: 1
-              }]
-          },
-          options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              scales: {
-                  yAxes: [{
-                      ticks: {
-                          beginAtZero: true
-                      }
-                  }]
-              }
-          }
-      });
+    // Pie chart
+    var ctx = document.getElementById('pie-chart').getContext('2d');
+    var myPieChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Pie Chart',
+          data: values,
+          backgroundColor: [
+            'rgba(54, 162, 235, 0.7)',
+            'rgba(255, 99, 132, 0.7)',
+            'rgba(255, 206, 86, 0.7)'
+          ],
+          borderColor: [
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(255, 206, 86, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
   });
 </script>

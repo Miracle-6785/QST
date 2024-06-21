@@ -1,20 +1,11 @@
 import json
 import re
-# import string
-from flask import Flask, render_template, request
-# from transformers import XLMRobertaTokenizer, XLMRobertaForSequenceClassification
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments, AutoModel
+from flask import Flask, render_template, request # for building complex web applications
+from transformers import AutoTokenizer, AutoModelForSequenceClassification # fetch tokenizer and trained models
 
-# import torchtext
-# from torchtext.models import RobertaClassificationHead, XLMR_BASE_ENCODER
-import torch
-# from torch.nn import functional as f
-import matplotlib.pyplot as plt
+import torch # provide built-in layers: here, torch.softmax 
 import requests
 from bs4 import BeautifulSoup
-# from pyvi import ViTokenizer
-# from collections import Counter
-from nltk.stem import WordNetLemmatizer
 
 app = Flask(__name__, template_folder='template')
 
@@ -69,7 +60,6 @@ def get_stopwords_list(stop_file_path):
     
 stopwords_path = '/home/bxs/QST/data/vietnamese_stopwords.txt'
 sw = get_stopwords_list(stopwords_path)
-lemmatizer = WordNetLemmatizer()
 
 def clean_text(text):
     text = text.lower()
@@ -78,7 +68,7 @@ def clean_text(text):
     for p in punctuations:
         text = text.replace(p,'')
     text = [word.lower() for word in text.split() if word.lower() not in sw]
-    text = [lemmatizer.lemmatize(word) for word in text]
+    #text = [lemmatizer.lemmatize(word) for word in text]
     text = " ".join(text)
     return text
 
@@ -90,7 +80,7 @@ def prepare_text_transform():
     tokenizer = AutoTokenizer.from_pretrained("vinai/phobert-base-v2")
     return tokenizer
 
-def predict(sentence, model, tokenizer, label_map):
+def predict(sentence, model, tokenizer):
     inp = tokenizer(sentence, padding='max_length', max_length=128, truncation=True, return_tensors="pt")
     out = model(**inp)
     probabilities = torch.softmax(out.logits, dim=1).squeeze().detach().cpu().numpy()
@@ -107,14 +97,15 @@ def display():
     model = prepare_model()
     tokenizer = prepare_text_transform()
     
-    probs = list(predict(input_text, model, tokenizer, label_map))
-    
-        
+    probs = list(predict(input_text, model, tokenizer))
+    probs = [float(x) for x in probs]
+    url = False
     return render_template('index.html', 
                            input_text=input_text, 
                            probs=probs,
                            dump_label_map=json.dumps(label_map),
-                           label_map=label_map
+                           label_map=label_map,
+                           url=url
                            )
 
 @app.route('/predictUrl', methods=['POST'])
@@ -124,13 +115,17 @@ def show():
     model = prepare_model()
     tokenizer = prepare_text_transform()
     
-    probs = list(predict(articleCrawler(input_url), model, tokenizer, label_map))
+    probs = list(predict(articleCrawler(input_url), model, tokenizer))
+    probs = [float(x) for x in probs]
+    
+    url = True
     return render_template('index.html', 
                            input_url=input_url, 
                            result_content=articleCrawler(input_url), 
                            probs=probs,
                            dump_label_map=json.dumps(label_map),
-                           label_map=label_map
+                           label_map=label_map,
+                           url=url
                            )
 
 if __name__ == '__main__':
