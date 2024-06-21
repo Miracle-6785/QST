@@ -1,18 +1,19 @@
+import json
 import re
-import string
+# import string
 from flask import Flask, render_template, request
-from transformers import XLMRobertaTokenizer, XLMRobertaForSequenceClassification
+# from transformers import XLMRobertaTokenizer, XLMRobertaForSequenceClassification
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments, AutoModel
 
-import torchtext
-from torchtext.models import RobertaClassificationHead, XLMR_BASE_ENCODER
+# import torchtext
+# from torchtext.models import RobertaClassificationHead, XLMR_BASE_ENCODER
 import torch
-from torch.nn import functional as f
+# from torch.nn import functional as f
 import matplotlib.pyplot as plt
 import requests
 from bs4 import BeautifulSoup
-from pyvi import ViTokenizer
-from collections import Counter
+# from pyvi import ViTokenizer
+# from collections import Counter
 from nltk.stem import WordNetLemmatizer
 
 app = Flask(__name__, template_folder='template')
@@ -66,7 +67,7 @@ def get_stopwords_list(stop_file_path):
         stop_set = set(m.strip() for m in stopwords)
         return list(frozenset(stop_set))
     
-stopwords_path = '../data/vietnamese_stopwords.txt'
+stopwords_path = '/home/bxs/QST/data/vietnamese_stopwords.txt'
 sw = get_stopwords_list(stopwords_path)
 lemmatizer = WordNetLemmatizer()
 
@@ -82,40 +83,18 @@ def clean_text(text):
     return text
 
 def prepare_model():
-    '''
-    num_classes = 3
-    input_dim = 768
-
-    classifier_head = RobertaClassificationHead(num_classes=num_classes, input_dim=input_dim)
-    model = XLMR_BASE_ENCODER.get_model(head=classifier_head)
-    
-    DEMO_MODEL_PATH = '../source/output/xlmrb/model_max_weighted_f1.pth'
-    model.load_state_dict(torch.load(DEMO_MODEL_PATH))
-    model.to(DEVICE)
-    '''
-    model = AutoModelForSequenceClassification.from_pretrained('../models/phobert')
+    model = AutoModelForSequenceClassification.from_pretrained('/home/bxs/QST/models/phobert')
     return model
 
 def prepare_text_transform():
-    '''text_transform = torchtext.models.XLMR_LARGE_ENCODER.transform()
-    return text_transform
-    '''
     tokenizer = AutoTokenizer.from_pretrained("vinai/phobert-base-v2")
     return tokenizer
-'''
-def predict_xlmRoberta(sentence, model, text_transform, label_map):
-    transformed_text = text_transform(sentence)
-    out = model(torch.tensor([transformed_text]).to(DEVICE))
-    probabilities = torch.softmax(out, dim=1).squeeze().detach().cpu().numpy()
-    predicted_label = label_map[torch.argmax(out).item()]
-    return probabilities, predicted_label
-'''
+
 def predict(sentence, model, tokenizer, label_map):
     inp = tokenizer(sentence, padding='max_length', max_length=128, truncation=True, return_tensors="pt")
     out = model(**inp)
     probabilities = torch.softmax(out.logits, dim=1).squeeze().detach().cpu().numpy()
-    predicted_label = label_map[torch.argmax(out.logits).item()]
-    return probabilities, predicted_label
+    return probabilities
 
 @app.route('/')
 def home():
@@ -128,12 +107,13 @@ def display():
     model = prepare_model()
     tokenizer = prepare_text_transform()
     
-    result = predict(input_text, model, tokenizer, label_map)
-    zipped_result = zip(range(len(result[0])), result[0])
+    probs = list(predict(input_text, model, tokenizer, label_map))
+    
+        
     return render_template('index.html', 
                            input_text=input_text, 
-                           result=result, 
-                           zipped_result=zipped_result, 
+                           probs=probs,
+                           dump_label_map=json.dumps(label_map),
                            label_map=label_map
                            )
 
@@ -144,13 +124,12 @@ def show():
     model = prepare_model()
     tokenizer = prepare_text_transform()
     
-    result_Url = predict(articleCrawler(input_url), model, tokenizer, label_map)
-    zipped_result_Url = zip(range(len(result_Url[0])), result_Url[0])
+    probs = list(predict(articleCrawler(input_url), model, tokenizer, label_map))
     return render_template('index.html', 
                            input_url=input_url, 
                            result_content=articleCrawler(input_url), 
-                           result_Url=result_Url, 
-                           zipped_result_Url=zipped_result_Url,
+                           probs=probs,
+                           dump_label_map=json.dumps(label_map),
                            label_map=label_map
                            )
 

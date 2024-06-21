@@ -1,64 +1,57 @@
 <!doctype html>
 <html>
-  <head>
-    <title>Predict</title>
-    <meta charset="utf-8" name="viewport"
-      content="width=device-width, initial-scale=1">
-    <link href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
-      media="screen" rel="stylesheet" type="text/css" />
-    <link href="static/css/frame.css" media="screen" rel="stylesheet"
-      type="text/css" />
-    <link href="static/css/controls.css" media="screen" rel="stylesheet"
-      type="text/css" />
-    <link href="static/css/custom.css" media="screen" rel="stylesheet"
-      type="text/css" />
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700'
-      rel='stylesheet' type='text/css'>
-    <link
-      href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700'
-      rel='stylesheet' type='text/css'>
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700"
-      rel="stylesheet">
-    <script
-      src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="../static/js/menu.js"></script>
-    <script src="../static/js/footer.js"></script>
-    <style>
+
+<head>
+  <title>Predict</title>
+  <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" media="screen" rel="stylesheet"
+    type="text/css" />
+  <link href="static/css/frame.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href="static/css/controls.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href="static/css/custom.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="../static/js/menu.js"></script>
+  <script src="../static/js/footer.js"></script>
+  <style>
     .menu-index {
       color: rgb(255, 255, 255) !important;
       opacity: 1 !important;
       font-weight: 700 !important;
     }
   </style>
-  </head>
+</head>
 
-  <body>
-    <div class="menu-container"></div>
-    <div class="content-container">
-      <div class="content">
-        <div class="content-table flex-column">
+<body>
+  <div class="menu-container"></div>
+  <div class="content-container">
+    <div class="content">
+      <div class="content-table flex-column">
+        <div class="flex-row">
+          <div class="flex-item flex-column">
+            <h1 class="text add-top-margin">Corporate Stock Review</h1>
+          </div>
+        </div>
+
+        <div class="content">
           <div class="flex-row">
             <div class="flex-item flex-column">
-              <h1 class="text add-top-margin">Corporate Stock Review</h1>
-            </div>
-          </div>
-
-          <div class="content">
-            <div class="flex-row">
-              <div class="flex-item flex-column">
-                <h2 id="survey"> <button class="custom-button-flat"><img
-                      src="static/img/play.png"><span>Give it a try</span></button></h2>
-                <hr>
-                <p class="text">Glad to see you! Enter the url, sentence or
-                  passage here please, and you will
-                  see the surprises! Believe me, it worths a trial and thanks
-                  for comming here.
-                </p>
-                <div class="custom-survey add-top-margin add-bottom-margin">
-                  <span class="text">Enter the content of newspaper you want to
-                    predict?</span>
-                  <form action="/predict" method="post">
-                    <!-- <label for="model_name">Choose a model type:</label>
+              <h2 id="survey"> <button class="custom-button-flat"><img src="static/img/play.png"><span>Give it a
+                    try</span></button></h2>
+              <hr>
+              <p class="text">Glad to see you! Enter the url, sentence or
+                passage here please, and you will
+                see the surprises! Believe me, it worths a trial and thanks
+                for comming here.
+              </p>
+              <div class="custom-survey add-top-margin add-bottom-margin">
+                <span class="text">Enter the content of newspaper you want to
+                  predict?</span>
+                <form action="/predict" method="post">
+                  <!-- <label for="model_name">Choose a model type:</label>
                     <select id="model_name_dropdown" name="model_name"
                       value="lrcn" onclick="getModelName()" form="myForm">
                       <option value="tfidfRf">TF - IDF with Random Forest</option>
@@ -66,19 +59,17 @@
                       <option value="dbgru">dbgru</option>
                       <option value="xlmRoberta">XLM - RoBERTa</option>
                     </select> -->
-                    <textarea class="custom-textbox-survey add-top-margin"
-                      name="input-text"
-                      placeholder="(max 1000 characters)" maxlength="1000"
-                      rows="4" cols="50"></textarea>
-                    <br>
-                    <input type="submit" value="Predict">
-                  </form>
-                </div>
-                <div class="custom-survey add-top-margin add-bottom-margin">
-                  <span class="text">Enter the link of newspaper you want to
-                    predict? (currently support for VnExpress, Vneconomy, CafeF)</span>
-                  <form action="/predictUrl" method="post">
-                    <!-- <label for="model_name">Choose a model type:</label>
+                  <textarea class="custom-textbox-survey add-top-margin" name="input-text"
+                    placeholder="(max 1000 characters)" maxlength="1000" rows="4" cols="50"></textarea>
+                  <br>
+                  <input type="submit" value="Predict">
+                </form>
+              </div>
+              <div class="custom-survey add-top-margin add-bottom-margin">
+                <span class="text">Enter the link of newspaper you want to
+                  predict? (currently support for VnExpress, Vneconomy, CafeF)</span>
+                <form action="/predictUrl" method="post">
+                  <!-- <label for="model_name">Choose a model type:</label>
                     <select id="model_name_dropdown" name="model_name"
                       value="lrcn" onclick="getModelName()" form="myForm">
                       <option value="tfidfRf">TF - IDF with Random Forest</option>
@@ -86,66 +77,125 @@
                       <option value="dbgru">dbgru</option>
                       <option value="xlmRoberta">XLM - RoBERTa</option>
                     </select> -->
-                    <input type="text"
-                      class="custom-textbox-survey add-top-margin"
-                      name="input-url" placeholder="Enter URL">
-                    <input type="submit" value="Predict">
-                  </form>
-                </div>
+                  <input type="text" class="custom-textbox-survey add-top-margin" name="input-url"
+                    placeholder="Enter URL">
+                  <input type="submit" value="Predict">
+                </form>
               </div>
             </div>
           </div>
-          {% if input_text %}
-          <div class="flex-row">
-            <div class="flex-item flex-column">
-              <h2>Predicted text</h2>
-              <hr>
-              <p class="text">{{ input_text }}</p>
-            </div>
-          </div>
-          {% endif %}
-          {% if input_url %}
-          <div class="flex-row">
-            <div class="flex-item flex-column">
-              <h2>Predicted content</h2>
-              <hr>
-              <p class="text">{{ result_content }}</p>
-            </div>
-          </div>
-          {% endif %}
-          {% if result %}
-          <div class="flex-row">
-            <div class="flex-item flex-column">
-              <h2>Classification Result</h2>
-              <hr>
-              <ul>
-                {% for index, probability in zipped_result %}
-                <li>{{ label_map[index] }}: {{ '%.2f' % (probability * 100) }}%</li>
-                {% endfor %}
-              </ul>
-            </div>
-          </div>
-          {% endif %}
-          {% if result_Url %}
-          <div class="flex-row">
-            <div class="flex-item flex-column">
-              <h2>Classification Result</h2>
-              <hr>
-              <ul>
-                {% for index, probability in zipped_result_Url %}
-                <li>{{ label_map[index] }}: {{ '%.2f' % (probability * 100) }}%</li>
-                {% endfor %}
-              </ul>
-            </div>
-          </div>
-          {% endif %}
         </div>
+        {% if input_text %}
+        <div class="flex-row">
+          <div class="flex-item flex-column">
+            <h2>Predicted text</h2>
+            <hr>
+            <p class="text">{{ input_text }}</p>
+          </div>
+        </div>
+        {% endif %}
+        {% if input_url %}
+        <div class="flex-row">
+          <div class="flex-item flex-column">
+            <h2>Predicted content</h2>
+            <hr>
+            <p class="text">{{ result_content }}</p>
+          </div>
+        </div>
+        {% endif %}
+        {% if probs %}
+        <div class="flex-row">
+          <div class="flex-item flex-column">
+            <h2>Classification Result</h2>
+            <hr>
+            <div class="flex-row">
+              <div class="flex-item flex-column">
+                <ul>
+                  {% for prob in probs %}
+                  <li>{{ label_map[loop.index-1] }}: {{ '%.2f' % (prob * 100) }}%</li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <div class="flex-item flex-column">
+
+                <div style="width: 100%;">
+                  <canvas id="pie-chart"></canvas>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          {% endif %}
+          {% if probs_url %}
+          <div class="flex-row">
+            <div class="flex-item flex-column">
+              <h2>Classification Result</h2>
+              <hr>
+              <div class="flex-row">
+                <div class="flex-item flex-column">
+                  <ul>
+                    {% for prob in probs %}
+                    <li>{{ label_map[loop.index-1] }}: {{ '%.2f' % (prob * 100) }}%</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                <div class="flex-item flex-column">
+
+                  <div style="width: 100%;">
+                    <canvas id="pie-chart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="footer-container"></div>
       </div>
-      <div class="footer-container"></div>
-    </div>
-  </body>
+</body>
 
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-<script
-  src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      // Get data from Django context
+      var labels = Object.values(JSON.parse('{{ dump_label_map|safe }}'));
+      var values = JSON.parse('{{ probs|safe }}');
+
+      // Pie chart
+      var ctx = document.getElementById('pie-chart').getContext('2d');
+      var myPieChart = new Chart(ctx, {
+          type: 'pie',
+          data: {
+              labels: labels,
+              datasets: [{
+                  label: 'Pie Chart',
+                  data: values,
+                  backgroundColor: [
+                      'rgba(54, 162, 235, 0.7)',
+                      'rgba(255, 99, 132, 0.7)',
+                      'rgba(255, 206, 86, 0.7)'
+                  ],
+                  borderColor: [
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(255, 206, 86, 1)'
+                  ],
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero: true
+                      }
+                  }]
+              }
+          }
+      });
+  });
+</script>
