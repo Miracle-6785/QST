@@ -38,9 +38,6 @@ scrapy crawl crawler/spiders/'spider_name' -o 'data_file'.json
 cd data/
 python3 plain2json.py       # transform 3 text files into json files, stored in class foler
 python3 split.py            # merge and split dataset inside folder class into test and train section store into section/json
-```
-    or command:
-```bash
 python3 json2csv.py         # transform json files of data/section to csv file, stored in section/csv folder
 ```
 ### Installations
