@@ -39,16 +39,17 @@ cd data/
 python3 plain2json.py       # transform 3 text files into json files, stored in class foler
 python3 split.py            # merge and split dataset inside folder class into test and train section store into section/json
 ```
-or command:
+    or command:
 ```bash
 python3 json2csv.py         # transform json files of data/section to csv file, stored in section/csv folder
 ```
 ### Installations
 For demo: Be recorded in 'documents/lib.mp4'
+
 For training: comment in 'notebook'
 ### Demo Web Application
 Run: `python3 app.py` 
 
-*NOTE*: Demo runs on model 'phobert' in this drive link 'https://drive.google.com/drive/folders/1SJtxzDpmzzL7LINlmP2tttKlxHzvZla7?usp=drive_link'
+__*NOTE*__: Download model 'phobert' via this link 'https://drive.google.com/drive/folders/1SJtxzDpmzzL7LINlmP2tttKlxHzvZla7?usp=drive_link'
 
-*For quick check*: play video 'documents/demo.mp4' (demo recording) 
+__*For quick check*__: play video 'documents/demo.mp4' (demo recording) 
